@@ -22,7 +22,7 @@ public class MaterialAIWindow : EditorWindow
     private enum PreviewShape { Sphere, Cube }
     private PreviewShape previewShape = PreviewShape.Sphere;
 
-    [MenuItem("Tools/MateriAI")]
+    [MenuItem("Window/MateriAI")]
     public static void ShowWindow() => GetWindow<MaterialAIWindow>("MateriAI");
 
     private void OnEnable()
