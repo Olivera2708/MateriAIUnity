@@ -37,7 +37,8 @@ No complex tools. No texture painting. Just type, click, and create.
 ## 📸 Preview
 
 <p align="center">
-  <img src=".github/assets/demo.mp4" width="720" alt="MateriAI Editor Preview"/>
+  <a href="https://youtu.be/emPqT03LR9E">
+  </a>
 </p>
 
 ---
