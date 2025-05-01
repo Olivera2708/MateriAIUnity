@@ -67,4 +67,4 @@ See [LICENSE.md](./LICENSE.md) for full terms.
 We’d love your feedback and suggestions!
 
 📧 **matgenai.office@gmail.com**  
-🌐 [materiai.io](http://materiai-frontend.s3-website.eu-north-1.amazonaws.com/)
+🌐 [website](http://materiai-frontend.s3-website.eu-north-1.amazonaws.com/)
