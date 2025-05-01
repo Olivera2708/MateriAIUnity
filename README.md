@@ -38,8 +38,10 @@ No complex tools. No texture painting. Just type, click, and create.
 
 <p align="center">
   <a href="https://youtu.be/emPqT03LR9E">
+    <img src="https://img.youtube.com/vi/emPqT03LR9E/maxresdefault.jpg" width="720" alt="Watch the Demo Video"/>
   </a>
 </p>
+
 
 ---
 
