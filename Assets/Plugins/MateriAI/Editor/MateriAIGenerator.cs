@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 
 public static class MaterialAIGenerator
 {
-    private static readonly string baseUrl = "http://localhost:8000/api/v1/generate";
+    private static readonly string baseUrl = "https://nn74i2a85m.execute-api.us-east-1.amazonaws.com/prod/api/v1/generate";
 
     public static IEnumerator GenerateMaterial(string prompt, Texture2D image, System.Action<byte[]> onSuccess, System.Action<string> onError)
     {
@@ -39,21 +39,57 @@ public static class MaterialAIGenerator
 
         yield return request.SendWebRequest();
 
-        if (request.result == UnityWebRequest.Result.Success)
+        if (request.result != UnityWebRequest.Result.Success)
         {
-            onSuccess?.Invoke(request.downloadHandler.data);
+            onError?.Invoke(request.error);
+            yield break;
+        }
+
+        LambdaZipResponse response = null;
+        try
+        {
+            var responseJson = request.downloadHandler.text;
+            response = JsonUtility.FromJson<LambdaZipResponse>(responseJson);
+        }
+        catch (System.Exception ex)
+        {
+            onError?.Invoke($"Failed to parse download URL: {ex.Message}");
+            yield break;
+        }
+
+        if (response == null || string.IsNullOrEmpty(response.download_url))
+        {
+            onError?.Invoke("Download URL is missing.");
+            yield break;
+        }
+
+        UnityWebRequest downloadRequest = UnityWebRequest.Get(response.download_url);
+        downloadRequest.downloadHandler = new DownloadHandlerBuffer();
+
+        yield return downloadRequest.SendWebRequest();
+
+        if (downloadRequest.result == UnityWebRequest.Result.Success)
+        {
+            byte[] zipData = downloadRequest.downloadHandler.data;
+            onSuccess?.Invoke(zipData);
         }
         else
         {
-            onError?.Invoke(request.error);
+            onError?.Invoke($"Failed to download ZIP: {downloadRequest.error}");
         }
+    }
+
+    [System.Serializable]
+    private class LambdaZipResponse
+    {
+        public string download_url;
     }
     
     public static IEnumerator GenerateBaseTexture(string prompt, Texture2D image, System.Action<Texture2D> onSuccess, System.Action<string> onError)
     {
         UnityWebRequest request;
 
-        if (image == null)
+        if (image is null)
         {
             var json = JsonUtility.ToJson(new PromptWrapper { prompt = prompt });
             byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
@@ -66,7 +102,7 @@ public static class MaterialAIGenerator
         }
         else
         {
-            Texture2D readableImage = MakeReadable(image); // 👈 still unsafe if image is null!
+            Texture2D readableImage = MakeReadable(image);
             if (readableImage is null)
             {
                 onError?.Invoke("Reference image is invalid.");
@@ -88,21 +124,48 @@ public static class MaterialAIGenerator
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            byte[] imageData = request.downloadHandler.data;
-            Texture2D tex = new Texture2D(2, 2);
-            if (tex.LoadImage(imageData))
+            try
             {
-                onSuccess?.Invoke(tex);
+                var responseJson = request.downloadHandler.text;
+                var response = JsonUtility.FromJson<LambdaImageResponse>(responseJson);
+
+                byte[] imageData = System.Convert.FromBase64String(response.body);
+
+                Texture2D tex = new Texture2D(2, 2);
+                if (tex.LoadImage(imageData))
+                {
+                    onSuccess?.Invoke(tex);
+                }
+                else
+                {
+                    onError?.Invoke("Failed to load image from decoded base64.");
+                }
             }
-            else
+            catch (System.Exception ex)
             {
-                onError?.Invoke("Failed to load image from response.");
+                onError?.Invoke($"Failed to parse or load image: {ex.Message}");
             }
         }
         else
         {
             onError?.Invoke(request.error);
         }
+    }
+
+    [System.Serializable]
+    private class LambdaImageResponse
+    {
+        public int statusCode;
+        public LambdaHeaders headers;
+        public bool isBase64Encoded;
+        public string body;
+    }
+
+    [System.Serializable]
+    private class LambdaHeaders
+    {
+        public string ContentType;
+        public string ContentDisposition;
     }
     
     private static Texture2D MakeReadable(Texture2D source)

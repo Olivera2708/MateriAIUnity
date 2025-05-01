@@ -10,6 +10,7 @@ public class MaterialAIWindow : EditorWindow
     private Texture2D referenceImage;
     private bool isGenerating = false;
     private bool generateOnlyBaseTexture = false;
+    private string errorMessage = null;
 
     private Texture2D baseTex, normalTex, roughnessTex;
     private Material previewMaterial;
