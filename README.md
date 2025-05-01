@@ -5,8 +5,7 @@
 <h2 align="center">MateriAI – AI Material Generator for Unity</h2>
 
 <p align="center">
-  <a href="http://materiai-frontend.s3-website.eu-north-1.amazonaws.com/">🌐 Try It Online</a> •
-  <a href="https://github.com/Olivera2708/MateriAIUnity/releases">📦 Download Plugin</a>
+  <a href="http://materiai-frontend.s3-website.eu-north-1.amazonaws.com/">🌐 Try It Online</a>
 </p>
 
 ---
@@ -38,7 +37,7 @@ No complex tools. No texture painting. Just type, click, and create.
 ## 📸 Preview
 
 <p align="center">
-  <img src=".github/assets/preview.png" width="720" alt="MateriAI Editor Preview"/>
+  <img src=".github/assets/demo.mp4" width="720" alt="MateriAI Editor Preview"/>
 </p>
 
 ---
