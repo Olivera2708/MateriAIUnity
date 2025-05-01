@@ -1,5 +1,5 @@
 <p align="center">
-  <img src=".github/assets/logo.png" width="180" alt="MateriAI Logo"/>
+  <img src=".github/assets/icon.png" width="180" alt="MateriAI Logo"/>
 </p>
 
 <h2 align="center">MateriAI – AI Material Generator for Unity</h2>
