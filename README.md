@@ -5,7 +5,7 @@
 <h2 align="center">MateriAI – AI Material Generator for Unity</h2>
 
 <p align="center">
-  <a href="http://materiai-frontend.s3-website.eu-north-1.amazonaws.com/">🌐 Try It Online</a>
+  <a href="http://matgenai.com">🌐 Try It Online</a>
 </p>
 
 ---
